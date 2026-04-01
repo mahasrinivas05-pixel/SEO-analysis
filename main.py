@@ -1,14 +1,15 @@
 import os
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 def generate_ai_content(concept, keywords, title, description):
 
-    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+    client = genai.Client(
+        api_key=os.environ.get("GEMINI_API_KEY"),
+    )
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
     prompt = f"""
 You are a YouTube SEO + Content Expert.
 
@@ -50,6 +51,9 @@ Hashtags:
 ...
 """
 
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
 
     return response.text
