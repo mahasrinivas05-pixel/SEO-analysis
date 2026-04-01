@@ -5,168 +5,20 @@ import numpy as np
 from code import calculate_score, parse_ai_output
 from main import generate_ai_content
 
-st.set_page_config(page_title="Maha's SEO Analyzer", layout="wide")
+st.set_page_config(page_title="YouTube SEO AI Tool", layout="centered")
+
+st.title("🎯 YouTube SEO Analyzer + AI Optimizer")
 
 # -----------------------
-# CUSTOM CSS (PROFESSIONAL WHITE UI)
+# INPUT SECTION
 # -----------------------
-st.markdown("""
-<style>
-/* General */
-body {
-    font-family: 'Segoe UI', sans-serif;
-}
-
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    border-bottom: 1px solid #eee;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-}
-
-.nav-button {
-    padding: 8px 18px;
-    border-radius: 8px;
-    background: #000;
-    color: #fff !important;
-}
-
-/* Hero */
-.hero {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.hero h1 {
-    font-size: 40px;
-    font-weight: bold;
-}
-
-.hero p {
-    font-size: 18px;
-    color: #555;
-}
-
-.cta-btn {
-    margin-top: 20px;
-    padding: 12px 25px;
-    background: black;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    display: inline-block;
-}
-
-/* Sections */
-.section {
-    padding: 50px 20px;
-    text-align: center;
-}
-
-.section h2 {
-    margin-bottom: 20px;
-}
-
-.card {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 10px;
-}
-
-/* Analyzer */
-.analyzer-box {
-    background: #fafafa;
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid #eee;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 28px;
-    }
-}
-</style>
-""", unsafe_allow_html=True)
-
-# -----------------------
-# NAVBAR
-# -----------------------
-st.markdown("""
-<div class="navbar">
-    <h3>Maha's SEO Analyzer</h3>
-    <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a class="nav-button" href="#">Analyzer</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# -----------------------
-# HERO SECTION
-# -----------------------
-st.markdown("""
-<div class="hero">
-    <h1>🚀 AI-Powered YouTube SEO Optimizer</h1>
-    <p>Turn your video ideas into high-performing titles, descriptions, and hashtags — instantly.</p>
-    <a class="cta-btn">Try the Tool Now</a>
-</div>
-""", unsafe_allow_html=True)
-
-# -----------------------
-# ABOUT TOOL
-# -----------------------
-st.markdown("""
-<div class="section">
-    <h2>Why This Tool Exists</h2>
-    <p>Creating YouTube content is easy. Getting views is not.</p>
-    <p>This AI-powered tool analyzes your title and description, scores your SEO performance, and suggests optimized content to improve visibility and engagement.</p>
-</div>
-""", unsafe_allow_html=True)
-
-# -----------------------
-# HOW IT WORKS
-# -----------------------
-st.markdown("""
-<div class="section">
-    <h2>How It Works</h2>
-    <p>Enter your video concept, keywords, title, and description</p>
-    <p>Get an instant SEO score</p>
-    <p>View insights with charts</p>
-    <p>Generate high-CTR AI content</p>
-</div>
-""", unsafe_allow_html=True)
-
-# -----------------------
-# ANALYZER UI (WRAPPED)
-# -----------------------
-st.markdown('<div class="section"><h2>🔍 Analyzer</h2></div>', unsafe_allow_html=True)
-
-st.markdown('<div class="analyzer-box">', unsafe_allow_html=True)
-
 concept = st.text_input("Enter Concept of Video")
 keywords = st.text_input("Enter Keywords (comma separated)")
 title = st.text_input("Enter Title")
 description = st.text_area("Enter Description")
 
 # -----------------------
-# SCORE BUTTON (UNCHANGED)
+# SCORE BUTTON
 # -----------------------
 if st.button("Analyze SEO Score"):
 
@@ -179,6 +31,10 @@ if st.button("Analyze SEO Score"):
 
         st.write(result)
 
+        # -----------------------
+        # CHARTS (BAR + LINE)
+        # -----------------------
+
         labels = ["Title", "Description", "Hook", "Curiosity"]
         max_scores = [30, 30, 20, 20]
         obtained_scores = [
@@ -190,6 +46,7 @@ if st.button("Analyze SEO Score"):
 
         remaining_scores = [m - o for m, o in zip(max_scores, obtained_scores)]
 
+        # BAR CHART
         fig1, ax1 = plt.subplots()
         x = np.arange(len(labels))
 
@@ -207,6 +64,7 @@ if st.button("Analyze SEO Score"):
 
         st.pyplot(fig1)
 
+        # LINE CHART
         fig2, ax2 = plt.subplots()
 
         ax2.plot(x, max_scores, marker='o', linestyle='--', label='Max Score')
@@ -230,7 +88,7 @@ if st.button("Analyze SEO Score"):
         st.warning("Please fill all fields")
 
 # -----------------------
-# AI GENERATION (UNCHANGED)
+# AI GENERATION
 # -----------------------
 if st.button("Generate AI Suggestions"):
 
@@ -267,16 +125,3 @@ if st.button("Generate AI Suggestions"):
 
     else:
         st.warning("Please fill all fields")
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# -----------------------
-# ABOUT SECTION
-# -----------------------
-st.markdown("""
-<div class="section">
-    <h2>About</h2>
-    <p>Hi, I’m Mahalakshmi S, pursuing M.Sc. Data Science at Periyar University.</p>
-    <p>This platform helps creators improve YouTube performance using simple, practical strategies.</p>
-</div>
-""", unsafe_allow_html=True)
