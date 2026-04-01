@@ -1,16 +1,14 @@
-# main.py
-
 import os
-from google import genai
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 def generate_ai_content(concept, keywords, title, description):
 
-    client = genai.Client(
-        api_key=os.environ.get("GEMINI_API_KEY"),
-    )
+    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+
+    model = genai.GenerativeModel("gemini-pro")
 
     prompt = f"""
 You are a YouTube SEO + Content Expert.
@@ -34,18 +32,11 @@ YOUR TASK:
 
 2. Generate 3 BETTER titles:
 - Length: 40–60 characters
-- Use keywords naturally (NOT all)
-- Must be human readable
-- Add curiosity + hook (What if, Secret, Shocking, etc.)
-- Avoid robotic keyword stuffing
+- Use keywords naturally
+- Add curiosity + hook
 
 3. Generate 1 optimized description:
 - Length: 250–350 characters
-- Must include most keywords naturally
-- Add storytelling tone
-- Add hashtags at end
-
-4. Keep it HIGH CTR + NATURAL (very important)
 
 STRICT FORMAT:
 
@@ -60,9 +51,6 @@ Hashtags:
 ...
 """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-    )
+    response = model.generate_content(prompt)
 
     return response.text
