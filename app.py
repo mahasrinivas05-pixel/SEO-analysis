@@ -1,6 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+import base64
 
 from code import calculate_score, parse_ai_output
 from main import generate_ai_content
@@ -13,13 +14,17 @@ st.set_page_config(page_title="YouTube SEO AI Tool", layout="centered")
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "About", "Account"])
 
-
 # -----------------------
-# HOME PAGE (YOUR ORIGINAL CODE)
+# HOME PAGE
 # -----------------------
 if page == "Home":
 
     st.title("🎯 YouTube SEO Analyzer + AI Optimizer")
+
+    # HERO IMAGE
+    st.image("https://img.freepik.com/free-vector/seo-optimization-concept_23-2147504149.jpg", use_container_width=True)
+
+    st.markdown("### 🚀 Boost Your YouTube Video Performance with AI")
 
     # -----------------------
     # INPUT SECTION
@@ -28,6 +33,8 @@ if page == "Home":
     keywords = st.text_input("Enter Keywords (comma separated)")
     title = st.text_input("Enter Title")
     description = st.text_area("Enter Description")
+
+    report_text = ""
 
     # -----------------------
     # SCORE BUTTON
@@ -43,9 +50,7 @@ if page == "Home":
 
             st.write(result)
 
-            # -----------------------
-            # CHARTS (BAR + LINE)
-            # -----------------------
+            report_text += f"Final Score: {result['Final Score']}\n{result}\n"
 
             labels = ["Title", "Description", "Hook", "Curiosity"]
             max_scores = [30, 30, 20, 20]
@@ -135,8 +140,21 @@ if page == "Home":
             st.subheader("#️⃣ Hashtags")
             st.write(hashtags)
 
+            report_text += f"\nBest Title: {best_title}\nDescription: {ai_desc}\nHashtags: {hashtags}"
+
         else:
             st.warning("Please fill all fields")
+
+    # -----------------------
+    # DOWNLOAD REPORT
+    # -----------------------
+    if report_text:
+        st.download_button(
+            label="📥 Download Report",
+            data=report_text,
+            file_name="seo_report.txt",
+            mime="text/plain"
+        )
 
 
 # -----------------------
@@ -146,15 +164,25 @@ elif page == "About":
 
     st.title("📄 About")
 
+    st.image("https://img.freepik.com/free-vector/about-us-concept-illustration_114360-669.jpg", use_container_width=True)
+
+    st.markdown("## 🎯 About YouTube SEO Analyzer + AI Optimizer")
     st.write("""
-    Hi, I'm Mahalakshmi 👋  
+    This tool helps YouTube creators improve their video performance using AI.
+    It analyzes SEO factors like title, description, and keywords.
+    """)
 
-    I'm pursuing M.Sc Data Science at Periyar University.
+    st.markdown("## ⭐ Testimonials")
+    st.write("""
+    💬 "This tool improved my video reach!"  
+    💬 "Very useful for beginners!"  
+    💬 "Simple and powerful AI tool!"
+    """)
 
-    This project is a YouTube SEO Analyzer + AI Optimizer that helps beginners 
-    improve their video performance by analyzing titles, descriptions, and keywords.
-
-    It also provides AI-based suggestions to increase reach and engagement.
+    st.markdown("## 📞 Contact")
+    st.write("""
+    📧 Email: mahalakshmi@example.com  
+    📍 Location: Tamil Nadu, India
     """)
 
 
@@ -165,7 +193,9 @@ elif page == "Account":
 
     st.title("👤 Account")
 
-    st.write("User Profile (Demo)")
+    st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=150)
+
+    st.write("User Profile")
 
     name = st.text_input("Enter your name")
     email = st.text_input("Enter your email")
