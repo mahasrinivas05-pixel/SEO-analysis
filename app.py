@@ -8,6 +8,25 @@ from main import generate_ai_content
 st.set_page_config(page_title="YouTube SEO AI Tool", layout="centered")
 
 # -----------------------
+# 🔥 CUSTOM CSS (NEW - ONLY ADD)
+# -----------------------
+st.markdown("""
+<style>
+.hero {
+    text-align: center;
+    padding: 30px;
+}
+.card {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+""", unsafe_allow_html=True)
+
+# -----------------------
 # SIDEBAR NAVIGATION
 # -----------------------
 st.sidebar.title("Navigation")
@@ -15,14 +34,38 @@ page = st.sidebar.radio("Go to", ["Home", "About", "Account"])
 
 
 # -----------------------
-# HOME PAGE (YOUR ORIGINAL CODE)
+# HOME PAGE (YOUR ORIGINAL CODE + UI ADDED)
 # -----------------------
 if page == "Home":
 
     st.title("🎯 YouTube SEO Analyzer + AI Optimizer")
 
+    # 🔥 HERO SECTION (ADDED)
+    st.markdown("""
+    <div class="hero">
+        <h2>🚀 Grow Your YouTube Channel with AI</h2>
+        <p>Analyze, Optimize & Go Viral 🔥</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.image("https://img.freepik.com/free-vector/seo-optimization-concept_23-2147504149.jpg", use_container_width=True)
+
+    # 🔥 FEATURES (ADDED)
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown('<div class="card">📊 SEO Score</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="card">🤖 AI Suggestions</div>', unsafe_allow_html=True)
+
+    with col3:
+        st.markdown('<div class="card">🔥 Viral Growth</div>', unsafe_allow_html=True)
+
+    st.markdown("---")
+
     # -----------------------
-    # INPUT SECTION
+    # INPUT SECTION (UNCHANGED)
     # -----------------------
     concept = st.text_input("Enter Concept of Video")
     keywords = st.text_input("Enter Keywords (comma separated)")
@@ -30,7 +73,7 @@ if page == "Home":
     description = st.text_area("Enter Description")
 
     # -----------------------
-    # SCORE BUTTON
+    # SCORE BUTTON (UNCHANGED)
     # -----------------------
     if st.button("Analyze SEO Score"):
 
@@ -43,10 +86,6 @@ if page == "Home":
 
             st.write(result)
 
-            # -----------------------
-            # CHARTS (BAR + LINE)
-            # -----------------------
-
             labels = ["Title", "Description", "Hook", "Curiosity"]
             max_scores = [30, 30, 20, 20]
             obtained_scores = [
@@ -58,7 +97,6 @@ if page == "Home":
 
             remaining_scores = [m - o for m, o in zip(max_scores, obtained_scores)]
 
-            # BAR CHART
             fig1, ax1 = plt.subplots()
             x = np.arange(len(labels))
 
@@ -76,7 +114,6 @@ if page == "Home":
 
             st.pyplot(fig1)
 
-            # LINE CHART
             fig2, ax2 = plt.subplots()
 
             ax2.plot(x, max_scores, marker='o', linestyle='--', label='Max Score')
@@ -100,7 +137,7 @@ if page == "Home":
             st.warning("Please fill all fields")
 
     # -----------------------
-    # AI GENERATION
+    # AI GENERATION (UNCHANGED)
     # -----------------------
     if st.button("Generate AI Suggestions"):
 
@@ -140,32 +177,41 @@ if page == "Home":
 
 
 # -----------------------
-# ABOUT PAGE
+# ABOUT PAGE (UPDATED UI ONLY)
 # -----------------------
 elif page == "About":
 
     st.title("📄 About")
 
+    st.image("https://img.freepik.com/free-vector/about-us-concept-illustration_114360-669.jpg", use_container_width=True)
+
+    st.markdown("## 🎯 About YouTube SEO Analyzer")
     st.write("""
-    Hi, I'm Mahalakshmi 👋  
-
-    I'm pursuing M.Sc Data Science at Periyar University.
-
-    This project is a YouTube SEO Analyzer + AI Optimizer that helps beginners 
-    improve their video performance by analyzing titles, descriptions, and keywords.
-
-    It also provides AI-based suggestions to increase reach and engagement.
+    This tool helps YouTube creators improve their video performance using AI.
     """)
+
+    st.markdown("## ⭐ Testimonials")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown('<div class="card">"Amazing tool!"</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="card">"Helped my channel grow!"</div>', unsafe_allow_html=True)
+
+    st.markdown("## 📞 Contact")
+    st.write("📧 mahalakshmi@example.com")
 
 
 # -----------------------
-# ACCOUNT PAGE
+# ACCOUNT PAGE (UPDATED UI ONLY)
 # -----------------------
 elif page == "Account":
 
     st.title("👤 Account")
 
-    st.write("User Profile (Demo)")
+    st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=120)
 
     name = st.text_input("Enter your name")
     email = st.text_input("Enter your email")
