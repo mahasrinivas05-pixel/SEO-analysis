@@ -56,7 +56,7 @@ Hashtags:
     for attempt in range(5):
         try:
             response = client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-1.5-flash",   # ✅ stable model
                 contents=prompt,
             )
             return response.text
@@ -65,16 +65,16 @@ Hashtags:
             print(f"Attempt {attempt+1} failed:", e)
             time.sleep(2)
 
-    # 🔥 FALLBACK CONTENT (if API fails)
-    return """⚠️ AI server is busy right now.
+    # 🔥 SMART DYNAMIC FALLBACK
+    return f"""⚠️ AI server is busy right now. Showing optimized suggestions:
 
-Title 1: Improve Your Video SEO Fast
-Title 2: Boost YouTube Growth with Smart SEO
-Title 3: Simple Tricks to Rank Your Videos
+Title 1: {title} - Improve SEO Fast
+Title 2: Boost {concept} with Smart Keywords
+Title 3: {concept} Secrets You Must Know
 
 Description:
-This video explains how to improve YouTube SEO using simple strategies. Learn how to optimize your title, description, and keywords to increase reach and engagement.
+Learn how to improve {concept} using powerful SEO strategies. This video helps you optimize your title, description, and keywords to increase reach and engagement.
 
 Hashtags:
-#YouTubeSEO #ContentGrowth #VideoOptimization
+#{concept.replace(" ", "")} #YouTubeSEO #ContentGrowth
 """
