@@ -1,4 +1,5 @@
 import os
+import time
 from google import genai
 from dotenv import load_dotenv
 
@@ -51,9 +52,29 @@ Hashtags:
 ...
 """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-    )
+    # 🔥 RETRY LOGIC
+    for attempt in range(5):
+        try:
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt,
+            )
+            return response.text
 
-    return response.text
+        except Exception as e:
+            print(f"Attempt {attempt+1} failed:", e)
+            time.sleep(2)
+
+    # 🔥 FALLBACK CONTENT (if API fails)
+    return """⚠️ AI server is busy right now.
+
+Title 1: Improve Your Video SEO Fast
+Title 2: Boost YouTube Growth with Smart SEO
+Title 3: Simple Tricks to Rank Your Videos
+
+Description:
+This video explains how to improve YouTube SEO using simple strategies. Learn how to optimize your title, description, and keywords to increase reach and engagement.
+
+Hashtags:
+#YouTubeSEO #ContentGrowth #VideoOptimization
+"""
