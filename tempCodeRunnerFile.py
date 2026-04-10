@@ -1,72 +1,59 @@
-import streamlit as st
-from code import calculate_score, parse_ai_output
-from main import generate_ai_content
+import os
+from google import genai
+from dotenv import load_dotenv
 
-st.set_page_config(page_title="YouTube SEO AI Tool", layout="centered")
+load_dotenv()
 
-st.title("🎯 YouTube SEO Analyzer + AI Optimizer")
+def generate_ai_content(concept, keywords, title, description):
 
-# -----------------------
-# INPUT SECTION
-# -----------------------
-concept = st.text_input("Enter Concept of Video")
-keywords = st.text_input("Enter Keywords (comma separated)")
-title = st.text_input("Enter Title")
-description = st.text_area("Enter Description")
+    client = genai.Client(
+        api_key=os.environ.get("GEMINI_API_KEY"),
+    )
 
-# -----------------------
-# SCORE BUTTON
-# -----------------------
-if st.button("Analyze SEO Score"):
+    prompt = f"""
+You are a YouTube SEO + Content Expert.
 
-    if concept and keywords and title and description:
+INPUT:
+Concept of Video:
+{concept}
 
-        result = calculate_score(keywords, title, description)
+Keywords:
+{keywords}
 
-        st.subheader("📊 Your Score")
-        st.write(f"Final Score: {result['Final Score']} / 100")
+Current Title:
+{title}
 
-        st.write(result)
+Current Description:
+{description}
 
-    else:
-        st.warning("Please fill all fields")
+YOUR TASK:
 
-# -----------------------
-# AI GENERATION
-# -----------------------
-if st.button("Generate AI Suggestions"):
+1. Improve the content (DO NOT keyword stuff)
 
-    if concept and keywords and title and description:
+2. Generate 3 BETTER titles:
+- Length: 40–60 characters
+- Use keywords naturally
+- Add curiosity + hook
 
-        with st.spinner("Generating AI content..."):
+3. Generate 1 optimized description:
+- Length: 250–350 characters
 
-            ai_output = generate_ai_content(concept, keywords, title, description)
+STRICT FORMAT:
 
-        st.subheader("🧠 AI Suggestions")
-        st.text(ai_output)
+Title 1: ...
+Title 2: ...
+Title 3: ...
 
-        # Parse output
-        titles, ai_desc, hashtags = parse_ai_output(ai_output)
+Description:
+...
 
-        st.subheader("🏆 Best Title")
+Hashtags:
+...
+"""
 
-        best_score = 0
-        best_title = ""
+    response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=prompt,
+)
 
-        for t in titles:
-            score = calculate_score(keywords, t, ai_desc)["Final Score"]
-
-            if score > best_score:
-                best_score = score
-                best_title = t
-
-        st.success(f"{best_title} (Score: {best_score})")
-
-        st.subheader("📄 Optimized Description")
-        st.write(ai_desc)
-
-        st.subheader("#️⃣ Hashtags")
-        st.write(hashtags)
-
-    else:
-        st.warning("Please fill all fields")
+    return response.text
