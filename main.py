@@ -27,19 +27,12 @@ Current Title:
 Current Description:
 {description}
 
-YOUR TASK:
+Generate:
+- 3 SEO optimized titles
+- 1 improved description
+- hashtags
 
-1. Improve the content (DO NOT keyword stuff)
-
-2. Generate 3 BETTER titles:
-- Length: 40–60 characters
-- Use keywords naturally
-- Add curiosity + hook
-
-3. Generate 1 optimized description:
-- Length: 250–350 characters
-
-STRICT FORMAT:
+Format:
 
 Title 1: ...
 Title 2: ...
@@ -52,11 +45,11 @@ Hashtags:
 ...
 """
 
-    # 🔥 RETRY LOGIC
+    # 🔁 RETRY LOGIC
     for attempt in range(5):
         try:
             response = client.models.generate_content(
-                model="gemini-1.5-flash",   # ✅ stable model
+                model="gemini-1.5-flash",
                 contents=prompt,
             )
             return response.text
@@ -65,16 +58,18 @@ Hashtags:
             print(f"Attempt {attempt+1} failed:", e)
             time.sleep(2)
 
-    # 🔥 SMART DYNAMIC FALLBACK
-    return f"""⚠️ AI server is busy right now. Showing optimized suggestions:
+    # 🔥 CLEAN FALLBACK
+    short_concept = " ".join(concept.split()[:3])
 
-Title 1: {title} - Improve SEO Fast
-Title 2: Boost {concept} with Smart Keywords
-Title 3: {concept} Secrets You Must Know
+    return f"""⚠️ AI server is busy. Showing optimized suggestions:
+
+Title 1: Improve {short_concept} SEO Fast
+Title 2: Boost Your Video with Smart SEO Tricks
+Title 3: Simple {short_concept} Growth Strategy
 
 Description:
-Learn how to improve {concept} using powerful SEO strategies. This video helps you optimize your title, description, and keywords to increase reach and engagement.
+Learn how to improve your YouTube videos using simple SEO techniques. Optimize titles, descriptions, and keywords to boost reach and engagement.
 
 Hashtags:
-#{concept.replace(" ", "")} #YouTubeSEO #ContentGrowth
+#YouTubeSEO #ContentGrowth #{short_concept.replace(" ", "")}
 """
