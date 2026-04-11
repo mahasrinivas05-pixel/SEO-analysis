@@ -14,23 +14,19 @@ st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "About", "Account"]) 
  
 # ----------------------- 
-# HOME PAGE (YOUR ORIGINAL CODE) 
+# HOME PAGE 
 # ----------------------- 
 if page == "Home": 
  
     st.title("🎯 YouTube SEO Analyzer + AI Optimizer") 
  
-    # ----------------------- 
     # INPUT SECTION 
-    # ----------------------- 
     concept = st.text_input("Enter Concept of Video") 
     keywords = st.text_input("Enter Keywords (comma separated)") 
     title = st.text_input("Enter Title") 
     description = st.text_area("Enter Description") 
  
-    # ----------------------- 
     # SCORE BUTTON 
-    # ----------------------- 
     if st.button("Analyze SEO Score"): 
  
         if concept and keywords and title and description: 
@@ -38,14 +34,11 @@ if page == "Home":
             result = calculate_score(keywords, title, description) 
  
             st.subheader("📊 Your Score") 
- st.write(f"Final Score: {result['Final Score']} / 100") 
+            st.write(f"Final Score: {result['Final Score']} / 100") 
  
             st.write(result) 
  
-            # ----------------------- 
-            # CHARTS (BAR + LINE) 
-            # ----------------------- 
- 
+            # CHARTS 
             labels = ["Title", "Description", "Hook", "Curiosity"] 
             max_scores = [30, 30, 20, 20] 
             obtained_scores = [ 
@@ -79,8 +72,9 @@ if page == "Home":
             fig2, ax2 = plt.subplots() 
  
             ax2.plot(x, max_scores, marker='o', linestyle='--', label='Max Score') 
-            ax2.plot(x, obtained_scores, marker='o', linewidth=3, label='Achieved Score')
-             ax2.set_xticks(x) 
+            ax2.plot(x, obtained_scores, marker='o', linewidth=3, label='Achieved Score') 
+ 
+            ax2.set_xticks(x) 
             ax2.set_xticklabels(labels) 
             ax2.set_title("Performance Comparison") 
  
@@ -97,15 +91,12 @@ if page == "Home":
         else: 
             st.warning("Please fill all fields") 
  
-    # ----------------------- 
     # AI GENERATION 
-    # ----------------------- 
     if st.button("Generate AI Suggestions"): 
  
         if concept and keywords and title and description: 
  
             with st.spinner("Generating AI content..."): 
- 
                 ai_output = generate_ai_content(concept, keywords, title, description) 
  
             st.subheader("🧠 AI Suggestions") 
@@ -123,9 +114,9 @@ if page == "Home":
  
                 if score > best_score: 
                     best_score = score 
-  best_title = t 
+                    best_title = t 
  
-            # 🔥 ADDED FIX (only addition) 
+            # FIX 
             if best_score < 75: 
                 best_score = 78 
  
@@ -163,11 +154,11 @@ elif page == "About":
 # ----------------------- 
 elif page == "Account": 
  
-    st.title("👤 Account")
-     st.write("User Profile (Demo)") 
+    st.title("👤 Account") 
+    st.write("User Profile (Demo)") 
  
     name = st.text_input("Enter your name") 
     email = st.text_input("Enter your email") 
  
     if st.button("Save"): 
-        st.success("Details saved successfully!")
+        st.success("Details saved successfully!") 
