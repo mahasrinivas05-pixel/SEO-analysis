@@ -35,11 +35,39 @@ def calculate_score(keyword_input, title, description):
         title_score = 0
 
     # -------------------------------
-    # DESCRIPTION SCORE (30) - SAME
+    # DESCRIPTION SCORE (30) - UPDATED
     # -------------------------------
+    desc_score = 0
+
+    # (A) Keyword Coverage (10 marks)
     desc_matches = sum(1 for k in keywords if k in desc_l)
     desc_ratio = desc_matches / total_keywords if total_keywords else 0
-    desc_score = 30 if desc_ratio >= 0.9 else int(desc_ratio * 30)
+
+    if desc_ratio >= 0.9:
+        desc_score += 10
+    else:
+        desc_score += int(desc_ratio * 10)
+
+    # (B) Length Optimization (10 marks)
+    desc_length = len(description)
+    word_count = len(description.split())
+
+    if 800 <= desc_length <= 1300:
+        desc_score += 10
+    else:
+        # proportional scoring based on closeness
+        if desc_length < 800:
+            desc_score += int((desc_length / 800) * 10)
+        elif desc_length > 1300:
+            desc_score += int((1300 / desc_length) * 10)
+
+    # (C) Minimum 5 Keywords Usage (10 marks)
+    if desc_matches >= 5:
+        desc_score += 10
+    else:
+        desc_score += int((desc_matches / 5) * 10)
+
+    desc_score = min(desc_score, 30)
 
     # -------------------------------
     # HOOK SCORE (20)
