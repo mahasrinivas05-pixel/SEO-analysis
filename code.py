@@ -1,21 +1,11 @@
 import re
 
 # -------------------------------
-# FLEXIBLE KEYWORD MATCH
+# KEYWORD MATCH (SIMPLE COUNT)
 # -------------------------------
-def keyword_match_score(text, keyword):
+def count_keywords_used(text, keywords):
     text = text.lower()
-    keyword = keyword.lower()
-
-    # Exact match
-    if keyword in text:
-        return 1.0
-
-    # Partial match (split words)
-    parts = keyword.split()
-    matches = sum(1 for p in parts if p in text)
-
-    return matches / len(parts) if parts else 0
+    return sum(1 for k in keywords if k in text)
 
 
 # -------------------------------
@@ -29,43 +19,88 @@ def calculate_score(keyword_input, title, description):
 
     total_keywords = len(keywords)
 
-    # TITLE SCORE (Flexible)
-    title_match_score = sum(keyword_match_score(title_l, k) for k in keywords)
-    title_ratio = title_match_score / total_keywords if total_keywords else 0
-    title_score = int(title_ratio * 30)
+    # -------------------------------
+    # TITLE SCORE (30)
+    # -------------------------------
+    used_keywords = count_keywords_used(title_l, keywords)
 
-    # DESCRIPTION SCORE (Flexible)
-    desc_match_score = sum(keyword_match_score(desc_l, k) for k in keywords)
-    desc_ratio = desc_match_score / total_keywords if total_keywords else 0
-    desc_score = int(desc_ratio * 30)
+    if total_keywords > 0:
+        usage_ratio = used_keywords / total_keywords
 
-    # HOOK SCORE (More forgiving)
-    power_words = ["what if", "secret", "shocking", "amazing", "unexpected", "truth"]
+        if usage_ratio >= 0.6:
+            title_score = 30
+        else:
+            title_score = int(usage_ratio * 30)
+    else:
+        title_score = 0
+
+    # -------------------------------
+    # DESCRIPTION SCORE (30) - SAME
+    # -------------------------------
+    desc_matches = sum(1 for k in keywords if k in desc_l)
+    desc_ratio = desc_matches / total_keywords if total_keywords else 0
+    desc_score = 30 if desc_ratio >= 0.9 else int(desc_ratio * 30)
+
+    # -------------------------------
+    # HOOK SCORE (20)
+    # -------------------------------
+    power_words = [
+        "what if", "secret", "shocking", "amazing", "unexpected", "truth",
+        "best", "top", "guide", "tips",
+        "brutal", "untold", "illegal", "dangerous", "rare", "instant",
+        "proven", "exposed", "insider", "ultimate"
+    ]
+
     hook_score = 0
 
-    for word in power_words:
-        if word in title_l:
-            hook_score += 6
+    # 10 marks for power word
+    if any(word in title_l for word in power_words):
+        hook_score += 10
 
-    if hook_score == 0 and any(w in title_l for w in ["best", "top", "guide", "tips"]):
-        hook_score = 8  # fallback hook
+    # 10 marks for title length (40–60 chars)
+    title_length = len(title)
+
+    if 40 <= title_length <= 60:
+        hook_score += 10
+    else:
+        if title_length < 40:
+            hook_score += int((title_length / 40) * 10)
+        elif title_length > 60:
+            hook_score += int((60 / title_length) * 10)
 
     hook_score = min(hook_score, 20)
 
-    # CURIOSITY SCORE (More natural)
+    # -------------------------------
+    # CURIOSITY SCORE (20)
+    # -------------------------------
+    curiosity_words = [
+        "secret", "shocking", "truth", "hidden", "revealed", "unknown",
+        "mystery", "exposed", "insane", "unbelievable", "crazy",
+        "unexpected", "surprising", "mind-blowing", "forbidden",
+        "now", "before", "last chance", "finally", "must watch"
+    ]
+
+    matches = sum(1 for w in curiosity_words if w in title_l)
+
     curiosity_score = 0
 
-    if "?" in title:
-        curiosity_score += 10
+    # 15 marks for curiosity words
+    if matches >= 2:
+        curiosity_score += 15
+    elif matches == 1:
+        curiosity_score += 8
 
-    if re.search(r"\bvs\b|\bmeet\b|\bstory\b|\bjourney\b|\bwhy\b|\bhow\b", title_l):
-        curiosity_score += 10
-
-    if curiosity_score == 0:
-        curiosity_score = 8  # fallback curiosity
+    # 5 marks for grammar/sentence formation
+    if len(title.split()) >= 4:
+        curiosity_score += 5
+    else:
+        curiosity_score += 2
 
     curiosity_score = min(curiosity_score, 20)
 
+    # -------------------------------
+    # FINAL SCORE
+    # -------------------------------
     final_score = title_score + desc_score + hook_score + curiosity_score
 
     return {
