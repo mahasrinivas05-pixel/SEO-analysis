@@ -13,31 +13,36 @@ def generate_ai_content(concept, keywords, title, description):
     prompt = f"""
 You are a YouTube SEO + Content Expert.
 
-Your goal is to generate output that will score ABOVE 90 using this scoring system.
+Your goal is to generate HIGH-QUALITY, NATURAL, and HIGH-PERFORMING content.
 
-SCORING LOGIC YOU MUST SATISFY:
+-------------------------
+GUIDELINES
+-------------------------
 
-1. KEYWORDS:
-- Keywords: {keywords}
-- Title MUST contain at least 70% of these keywords EXACTLY (same spelling)
-- Description MUST contain at least 90% of these keywords EXACTLY
+Keywords:
+{keywords}
 
-2. HOOK SCORE:
-- Title MUST include at least ONE of these power words:
-  what if, secret, shocking, amazing, unexpected, truth
+1. TITLE:
+- Include important keywords naturally (no stuffing)
+- Make it engaging and clickable
+- Use emotional or power words where suitable
+- Add curiosity (question / intrigue / contrast)
+- Keep it human and realistic
 
-3. CURIOSITY SCORE:
-- Title MUST include:
-  - A question mark (?) OR
-  - One of these words: vs, story, journey, meet
+2. DESCRIPTION:
+- Use keywords naturally across sentences
+- Make it informative and engaging
+- Avoid repetition and keyword stuffing
+- Write like a real YouTube description
 
-4. NATURAL FLOW:
-- Do NOT keyword stuff randomly
-- Make it readable, clickable, and human-friendly
+3. HASHTAGS:
+- Relevant and based on keywords
 
-INPUT:
+-------------------------
+INPUT
+-------------------------
 
-Concept of Video:
+Concept:
 {concept}
 
 Current Title:
@@ -46,26 +51,9 @@ Current Title:
 Current Description:
 {description}
 
-YOUR TASK:
-
-Generate:
-
-1. Three HIGH-SCORING titles (40–60 characters):
-- MUST include keywords
-- MUST include at least one power word
-- MUST include curiosity trigger ("?" or similar)
-
-2. One optimized description (250–350 characters):
-- MUST include almost ALL keywords naturally
-
-3. Relevant hashtags
-
-FINAL CHECK BEFORE OUTPUT:
-- Ensure keyword coverage is satisfied
-- Ensure hook word is present
-- Ensure curiosity trigger is present
-
-STRICT FORMAT (DO NOT CHANGE):
+-------------------------
+OUTPUT
+-------------------------
 
 Title 1: ...
 Title 2: ...
